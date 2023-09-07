@@ -99,16 +99,6 @@ DATABASES = {
         'PORT': env('DB_PORT'),
     }
 }
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'tt_nmx',
-        'USER': 'postgres',
-        'PASSWORD': 'tt_nmx_pwd123',
-        'HOST': 'localhost',
-        'PORT': 5432,
-    }
-}
 
 
 # Password validation

@@ -43,7 +43,7 @@ class ProductViewSet(ModelViewSet):
         # Проверяем количество категорий
         if len(category_names) < 2 or len(category_names) > 10:
             return Response(
-                {"detail": "Товар должен принадлежать от 2 до 10 категорий."},
+                {"detail": "Товар должен иметь от 2 до 10 категорий."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
