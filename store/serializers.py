@@ -21,9 +21,14 @@ class CategoryDeleteSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    category_names = serializers.SerializerMethodField()
+
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ('id', 'name', 'price', 'is_published', 'is_deleted', 'category_names')
+
+    def get_category_names(self, obj):
+        return [category.name for category in obj.category.all()]
 
 
 class ProductListSerializer(serializers.ModelSerializer):
