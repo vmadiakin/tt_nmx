@@ -1,0 +1,21 @@
+id,name,price,is_published,is_deleted
+1,Ноутбук,1000,True,False
+2,Кофеварка,50,True,False
+3,Велосипед,300,True,False
+4,Книга,20,True,False
+5,Фитнес-трекер,80,True,False
+6,Пицца,10,True,False
+7,Футбольный мяч,15,True,False
+8,Фотокамера,500,True,False
+9,Шампунь,5,True,False
+10,Скейтборд,40,True,False
+11,Микроволновая печь,60,True,False
+12,Часы,120,True,False
+13,Футболка,15,True,False
+14,Палатка,60,True,False
+15,Музыкальный инструмент (гитара),150,True,False
+16,Зонтик,10,True,False
+17,Сумка,30,True,False
+18,Спортивные ботинки,50,True,False
+19,Смартфон,700,True,False
+20,Пылесос,80,True,False
