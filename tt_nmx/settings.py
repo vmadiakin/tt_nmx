@@ -35,8 +35,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 MY_APPS = [
@@ -97,16 +96,6 @@ DATABASES = {
         'PASSWORD': env('DB_PASSWORD'),
         'HOST': env('DB_HOST'),
         'PORT': env('DB_PORT'),
-    }
-}
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'tt_nmx',
-        'USER': 'postgres',
-        'PASSWORD': 'tt_nmx_pwd123',
-        'HOST': 'localhost',
-        'PORT': 5432,
     }
 }
 
