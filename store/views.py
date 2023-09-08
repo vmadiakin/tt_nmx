@@ -4,10 +4,10 @@ from django_filters import rest_framework as django_filters
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-
 from .filters import ProductFilter
 from .models import Category, Product
 from .serializers import CategorySerializer, ProductSerializer, ProductCreateSerializer
+
 
 class CategoryViewSet(ModelViewSet):
     """
@@ -34,6 +34,7 @@ class CategoryViewSet(ModelViewSet):
         category.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class ProductViewSet(ModelViewSet):
     """
     API для управления товарами.
@@ -49,67 +50,23 @@ class ProductViewSet(ModelViewSet):
         responses={201: "Создано", 400: "Неверный запрос"}
     )
     def create(self, request, *args, **kwargs):
-        """
-        Создание нового товара с привязкой к категориям.
-        """
         serializer = ProductCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
-        validated_data = serializer.validated_data
-        category_names = validated_data.get('category_names', [])
-
-        if len(category_names) < 2 or len(category_names) > 10:
-            return Response(
-                {"detail": "Товар должен иметь от 2 до 10 категорий."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        product = Product.objects.create(
-            name=validated_data['name'],
-            price=validated_data['price'],
-            is_published=validated_data['is_published'],
-            is_deleted=validated_data['is_deleted']
-        )
-
-        categories = []
-        for category_name in category_names:
-            category, created = Category.objects.get_or_create(name=category_name)
-            categories.append(category)
-
-        product.category.set(categories)
-
+        product = serializer.save()
         return Response(ProductSerializer(product).data, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(
-        operation_description="Частичное обновление информации о товаре и привязанных категориях.",
+        operation_description="Редактирование товара с привязкой к категориям.",
         request_body=ProductCreateSerializer,
-        responses={200: ProductSerializer, 400: "Неверный запрос"}
+        responses={201: "Создано", 400: "Неверный запрос"}
     )
     def partial_update(self, request, *args, **kwargs):
-        """
-        Частичное обновление информации о товаре и привязанных категориях.
-        """
         instance = self.get_object()
         serializer = ProductCreateSerializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
+        product = serializer.save()
+        return Response(ProductSerializer(product).data)
 
-        validated_data = serializer.validated_data
-        category_names = validated_data.get('category_names', [])
-
-        categories = []
-        for category_name in category_names:
-            category, created = Category.objects.get_or_create(name=category_name)
-            categories.append(category)
-
-        instance.category.set(categories)
-        instance.save()
-
-        return Response(ProductSerializer(instance).data)
-
-    @swagger_auto_schema(
-        operation_description="Мягкое удаление товара.",
-        responses={204: "Успешное удаление"}
-    )
     def destroy(self, request, *args, **kwargs):
         """
         Мягкое удаление товара.

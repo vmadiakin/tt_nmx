@@ -48,3 +48,19 @@ class ProductCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ('name', 'price', 'category_names', 'is_published', 'is_deleted')
+        extra_kwargs = {
+            'category_names': {'required': True, 'help_text': 'Список имен категорий товара'},
+        }
+
+    def create_product(self, validated_data):
+        category_names = validated_data.pop('category_names', [])
+        product = Product.objects.create(**validated_data)
+
+        categories = []
+        for category_name in category_names:
+            category, created = Category.objects.get_or_create(name=category_name)
+            categories.append(category)
+
+        product.category.set(categories)
+        return product
+
