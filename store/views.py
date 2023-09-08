@@ -52,8 +52,15 @@ class ProductViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = ProductCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        product = serializer.save()
-        return Response(ProductSerializer(product).data, status=status.HTTP_201_CREATED)
+
+        validated_data = serializer.validated_data
+        category_names = validated_data.get('category_names', [])
+
+        if len(category_names) < 2 or len(category_names) > 10:
+            return Response(
+                {"detail": "Товар должен иметь от 2 до 10 категорий."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
     @swagger_auto_schema(
         operation_description="Редактирование товара с привязкой к категориям.",
