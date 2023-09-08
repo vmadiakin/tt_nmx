@@ -67,6 +67,10 @@ class ProductViewSet(ModelViewSet):
         product = serializer.save()
         return Response(ProductSerializer(product).data)
 
+    @swagger_auto_schema(
+        operation_description="Мягкое удаление товара.",
+        responses={204: "Удалено", 400: "Неверный запрос"}
+    )
     def destroy(self, request, *args, **kwargs):
         """
         Мягкое удаление товара.

@@ -63,3 +63,19 @@ class ProductCreateSerializer(serializers.ModelSerializer):
 
         product.category.set(categories)
         return product
+
+    def update(self, instance, validated_data):
+        category_names = validated_data.pop('category_names', [])
+        instance.name = validated_data.get('name', instance.name)
+        instance.price = validated_data.get('price', instance.price)
+        instance.is_published = validated_data.get('is_published', instance.is_published)
+        instance.is_deleted = validated_data.get('is_deleted', instance.is_deleted)
+        instance.save()
+
+        categories = []
+        for category_name in category_names:
+            category, created = Category.objects.get_or_create(name=category_name)
+            categories.append(category)
+
+        instance.category.set(categories)
+        return instance
