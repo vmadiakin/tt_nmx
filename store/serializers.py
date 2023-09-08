@@ -52,7 +52,7 @@ class ProductCreateSerializer(serializers.ModelSerializer):
             'category_names': {'required': True, 'help_text': 'Список имен категорий товара'},
         }
 
-    def create_product(self, validated_data):
+    def create(self, validated_data):
         category_names = validated_data.pop('category_names', [])
         product = Product.objects.create(**validated_data)
 
@@ -63,4 +63,3 @@ class ProductCreateSerializer(serializers.ModelSerializer):
 
         product.category.set(categories)
         return product
-
